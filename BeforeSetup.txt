@@ -1,0 +1,22 @@
+Use Database: sqlite
+Migrate fresh Database: php artisan migrate:fresh
+Seed Database: php artisan db:seed
+Seeder File Must have: 
+  $this->call([
+            CategorySeeder::class,
+            ItemOptionSeeder::class,
+
+            //Tea Seeder
+            HotTeaSeeder::class,
+            ColdTeaSeeder::class,
+
+            // Coffee Seeder
+            HotCoffeeSeeder::class,
+            ColdCoffeeSeeder::class,
+            FrappeCoffeeSeeder::class,
+
+        ]);
+After Seeded Product Will have 42 Item
+
+Check if everything is correct before run!!
+if everything correct then evreything should be done!
