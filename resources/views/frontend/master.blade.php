@@ -32,6 +32,11 @@
         .content {
             display: inline-block;
         }
+
+        .columns is-multiline {
+            align-items: center;
+            # make it in a align
+        }
     </style>
 </head>
 

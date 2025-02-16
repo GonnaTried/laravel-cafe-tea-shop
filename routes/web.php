@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\TeaController;
 use App\Http\Controllers\ViewItemController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,9 @@ Route::get('/location', [LocationController::class, 'index']);
 
 // View Item
 Route::get('/viewItem/{slug}', [ViewItemController::class, 'index'])->name('viewItem.index');
+
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
