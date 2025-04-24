@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class StaffMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Ignore this error on VS Code it just IDE error not run time error
-        if (!auth()->check() || !auth()->user()->hasRole('admin')) {
+        if (!auth()->check() || !auth()->user()->hasRole('staff')) {
             abort(403, 'Unauthorized access.');
         }
 

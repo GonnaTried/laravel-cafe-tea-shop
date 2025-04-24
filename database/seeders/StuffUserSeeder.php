@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 
-class AdminUserSeeder extends Seeder
+class StuffUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,20 +17,20 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         DB::transaction(function () {
-            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            $staffRole = Role::firstOrCreate(['name' => 'staff']);
 
-            $adminUser = User::where('phone', '0123456789')->first();
+            $staffUser = User::where('phone', 'staff')->first();
 
-            if (!$adminUser) {
-                $adminUser = User::create([
-                    'phone' => '0123456789',
+            if (!$staffUser) {
+                $staffUser = User::create([
+                    'phone' => 'staff',
                     'password' => Hash::make('password'),
                 ]);
             }
 
-            $adminUser->assignRole($adminRole);
+            $staffUser->assignRole($staffRole);
 
-            $this->command->info('Admin user processed.');
+            $this->command->info('Staff user processed.');
         });
     }
 }

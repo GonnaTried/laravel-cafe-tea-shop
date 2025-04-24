@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 // admin
 require __DIR__ . '/admin.php';
 
+// Staff
+require __DIR__ . '/staff.php';
+
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 
