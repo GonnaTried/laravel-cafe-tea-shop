@@ -47,12 +47,22 @@
                                             </div>
                                             <div class="columns is-mobile">
                                                 <div class="column is-6">
-                                                    <h6 class="has-text-warning has-text-weight-bold">{{ $coffee->price }}$
+                                                    <h6 class="has-text-warning has-text-weight-bold">
+                                                        {{ $coffee->price }}$
                                                     </h6>
                                                 </div>
                                                 <div class="column is-6 has-text-right">
-                                                    <button class="button is-primary is-small has-text-weight-bold">Order
-                                                        Now</button>
+                                                    {{-- Add to Cart Form --}}
+                                                    <form method="POST" action="{{ route('cart.add') }}">
+                                                        @csrf
+                                                        {{-- Corrected menu_item_id to use $coffee->id --}}
+                                                        <input type="hidden" name="menu_item_id"
+                                                            value="{{ $coffee->id }}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <button type="submit"
+                                                            class="button is-primary is-small has-text-weight-bold">Add to
+                                                            Cart</button> {{-- Changed button text --}}
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -92,8 +102,16 @@
                                                     </h6>
                                                 </div>
                                                 <div class="column is-6 has-text-right">
-                                                    <button class="button is-primary is-small has-text-weight-bold">Order
-                                                        Now</button>
+                                                    {{-- Add to Cart Form --}}
+                                                    <form method="POST" action="{{ route('cart.add') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="menu_item_id"
+                                                            value="{{ $coffee->id }}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <button type="submit"
+                                                            class="button is-primary is-small has-text-weight-bold">Add to
+                                                            Cart</button> {{-- Changed button text --}}
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -128,12 +146,21 @@
                                             </div>
                                             <div class="columns is-mobile">
                                                 <div class="column is-6">
-                                                    <h6 class="tittle has-text-warning has-text-weight-bold">
+                                                    <h6 class="title has-text-warning has-text-weight-bold">
+                                                        {{-- Corrected class: title to h6 --}}
                                                         {{ $coffee->price }}$</h6>
                                                 </div>
                                                 <div class="column is-6 has-text-right">
-                                                    <button class="button is-primary is-small has-text-weight-bold">Order
-                                                        Now</button>
+                                                    {{-- Add to Cart Form --}}
+                                                    <form method="POST" action="{{ route('cart.add') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="menu_item_id"
+                                                            value="{{ $coffee->id }}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <button type="submit"
+                                                            class="button is-primary is-small has-text-weight-bold">Add to
+                                                            Cart</button> {{-- Changed button text --}}
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -171,14 +198,38 @@
                 const frappeCoffeeTop = frappeCoffeeSection.offsetTop;
                 const scrollPosition = window.scrollY;
 
-                if (scrollPosition >= frappeCoffeeTop - 100) {
+                // Added check if sections exist before getting offsetTop
+                if (frappeCoffeeSection && scrollPosition >= frappeCoffeeSection.offsetTop - 100) {
                     highlightLink(frappeCoffeeLink);
-                } else if (scrollPosition >= icedCoffeeTop - 100) {
+                } else if (icedCoffeeSection && scrollPosition >= icedCoffeeSection.offsetTop - 100) {
                     highlightLink(icedCoffeeLink);
-                } else {
+                } else if (hotCoffeeSection && scrollPosition >= hotCoffeeSection.offsetTop - 100) {
                     highlightLink(hotCoffeeLink);
                 }
             }
+
+            // Removed event listeners for tea links, keeping only coffee links
+            const coffeeLinks = [hotCoffeeLink, icedCoffeeLink, frappeCoffeeLink];
+            coffeeLinks.forEach(link => {
+                if (link) { // Check if the element exists
+                    link.addEventListener('click', function(event) {
+                        // Prevent default anchor behavior if navigating to a section on the same page
+                        // event.preventDefault();
+
+                        // Scroll to the target section (you might need a smooth scroll library for better UX)
+                        const targetSection = document.getElementById(link.getAttribute('href')
+                            .substring(1));
+                        if (targetSection) {
+                            window.scrollTo({
+                                top: targetSection.offsetTop -
+                                50, // Adjust offset if needed
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                }
+            });
+
 
             window.addEventListener('scroll', checkActiveSection);
             window.addEventListener('load', checkActiveSection); // Call on page load too
