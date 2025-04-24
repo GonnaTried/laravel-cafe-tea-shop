@@ -19,11 +19,11 @@ class AdminUserSeeder extends Seeder
         DB::transaction(function () {
             $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-            $adminUser = User::where('phone', '0123456789')->first();
+            $adminUser = User::where('phone', 'admin')->first();
 
             if (!$adminUser) {
                 $adminUser = User::create([
-                    'phone' => '0123456789',
+                    'phone' => 'admin',
                     'password' => Hash::make('password'),
                 ]);
             }

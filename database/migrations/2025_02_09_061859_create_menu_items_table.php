@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('ingredients')->nullable();
             $table->decimal('price', 8, 2);
+            $table->integer('inventory');
             $table->string('image_path')->nullable();
             $table->timestamps();
         });

@@ -15,9 +15,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Ignore this error on VS Code it just IDE error not run time error
+        // Ignore this error on check() and user() it just IDE error not run time error
         if (!auth()->check() || !auth()->user()->hasRole('admin')) {
-            abort(403, 'Unauthorized access.');
+            abort(403);
         }
 
         return $next($request);
