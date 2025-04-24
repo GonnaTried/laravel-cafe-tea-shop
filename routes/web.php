@@ -12,8 +12,10 @@ use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
 // admin
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\MenuItemController as AdminMenuItemController;
+require __DIR__ . '/admin.php';
+
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 
 // Route::get('/', function () {
 //     return view('frontend.home.index');
@@ -56,19 +58,10 @@ Route::get('/terms-and-conditions', function () {
     return view('terms.index');
 })->name('terms');
 
-// Admin
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    // Admin Dashboard
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+// admin
+// Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+//     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Routes for managing Menu Items (example)
-    Route::get('/menu-items', [AdminMenuItemController::class, 'index'])->name('admin.menu-items.index');
-    Route::get('/menu-items/create', [AdminMenuItemController::class, 'create'])->name('admin.menu-items.create');
-    Route::post('/menu-items', [AdminMenuItemController::class, 'store'])->name('admin.menu-items.store');
-    Route::get('/menu-items/{menuItem}/edit', [AdminMenuItemController::class, 'edit'])->name('admin.menu-items.edit');
-    Route::put('/menu-items/{menuItem}', [AdminMenuItemController::class, 'update'])->name('admin.menu-items.update');
-    Route::delete('/menu-items/{menuItem}', [AdminMenuItemController::class, 'destroy'])->name('admin.menu-items.destroy');
-
-    // Add routes for managing Categories, ItemOptions, Orders, Users etc.
-    // Route::resource('categories', AdminCategoryController::class); // Example using resource routes
-});
+//     // Example Admin User Management Routes
+//     // Route::resource('users', AdminUserController::class);
+// });
