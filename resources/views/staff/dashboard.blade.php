@@ -37,7 +37,7 @@
                             </p>
                             <p class="heading has-text-white">Cooking Orders</p>
                             <br>
-                            <a href="{{ route('staff.orders.index', ['status' => 'preparing']) }}"
+                            <a href="{{ route('staff.orders.index', ['status' => 'cooking']) }}"
                                 class="button is-warning is-outlined">View Cooking</a> {{-- Link to orders list filtered by status --}}
                         </div>
                     </div>
