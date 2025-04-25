@@ -14,12 +14,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
-
-
         // Total Customer Users
         $totalCustomerCount = User::count();
 
-        // Total Products (Assuming MenuItem represents your products)
+        // Total Products (assuming MenuItem represents products)
         $totalProductCount = MenuItem::count();
 
         // New Customer User Registrations This Month
@@ -27,12 +25,11 @@ class DashboardController extends Controller
             ->whereYear('created_at', Carbon::now()->year)
             ->count();
 
-        // Total Income This Month
+        // Total Income This Month from COMPLETED orders
         $totalIncomeMonthly = Order::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
+            ->where('status', 'completed')
             ->sum('total_amount');
-
-
 
 
         // --- Pass Data to the View ---
@@ -41,7 +38,7 @@ class DashboardController extends Controller
             'totalCustomerCount' => $totalCustomerCount,
             'totalProductCount' => $totalProductCount,
             'newUserCountMonthly' => $newUserCountMonthly,
-            'totalIncomeMonthly' => $totalIncomeMonthly . '$',
+            'totalIncomeMonthly' => $totalIncomeMonthly,
         ]);
     }
 }

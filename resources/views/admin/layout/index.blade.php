@@ -59,7 +59,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script> <!-- Link to your main JavaScript file -->
-    @yield('scripts') <!-- Yield for page-specific scripts -->
+    {{-- @yield('scripts') <!-- Yield for page-specific scripts --> --}}
+    @stack('scripts')
 </body>
 
 </html>

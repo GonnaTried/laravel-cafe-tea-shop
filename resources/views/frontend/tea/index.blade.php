@@ -36,7 +36,9 @@
                                             <div class="card-image">
                                                 <figure class="image is-4by5">
                                                     <img href="{{ route('viewItem.index', $tea->slug) }}"
-                                                        src="{{ asset($tea->image_path) }}" alt="{{ $tea->name }}">
+                                                        {{-- src="{{ asset($tea->image_path) }}" alt="{{ $tea->name }}"> --}} <img src="{{ $tea->image_url }}"
+                                                        alt="{{ $tea->name }}">
+
                                                 </figure>
                                             </div>
                                         </a>
@@ -76,8 +78,9 @@
                                     <div class="card">
                                         <div class="card-image">
                                             <figure class="image is-4by5">
-                                                <img href="{{ route('viewItem.index', $tea->slug) }}"
-                                                    src="{{ asset($tea->image_path) }}" alt="{{ $tea->name }}">
+                                                <img href="{{ route('viewItem.index', $tea->slug) }}" {{-- src="{{ asset($tea->image_path) }}" alt="{{ $tea->name }}"> --}}
+                                                    <img src="{{ $tea->image_url }}" alt="{{ $tea->name }}">
+
                                             </figure>
                                         </div>
                                         <div class="card-content">

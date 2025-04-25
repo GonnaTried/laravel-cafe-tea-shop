@@ -16,10 +16,13 @@ class StaffMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Ignore this error on check() and user() it just IDE error not run time error
-        if (!auth()->check() || !auth()->user()->hasRole('staff')) {
-            abort(403);
+        if (auth()->check() || (auth()->user()->hasRole('staff'))) {
+            return $next($request);
         }
 
-        return $next($request);
+        // if (auth()->check() || (auth()->user()->hasRole('admin'))) {
+        //     return $next($request);
+        // }
+        abort(403);
     }
 }

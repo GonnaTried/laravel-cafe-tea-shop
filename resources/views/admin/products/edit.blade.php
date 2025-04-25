@@ -45,6 +45,35 @@
                     @enderror
                 </div>
 
+                {{-- Item Options (Radio Buttons) --}}
+                <div class="field">
+                    <label class="label">Available Options <span class="has-text-danger">*</span></label>
+                    {{-- Added required indicator --}}
+                    <div class="control">
+                        {{-- Use a single radio button group --}}
+                        @foreach ($itemOptions as $option)
+                            @php
+                                // Check if this option is currently attached to the product OR was previously selected
+                                // We expect the product to have *one* option attached now
+                                $isChecked =
+                                    old('selected_option_id', optional($product->itemOptions->first())->id) ==
+                                    $option->id;
+                            @endphp
+
+                            <div class="control">
+                                <label class="radio">
+                                    <input type="radio" name="selected_option_id" value="{{ $option->id }}"
+                                        {{ $isChecked ? 'checked' : '' }} required> {{-- Made radio required --}}
+                                    {{ $option->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                    @error('selected_option_id')
+                        <p class="help is-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{-- Description --}}
                 <div class="field">
                     <label class="label" for="description">Description</label>
@@ -92,9 +121,20 @@
                     @enderror
                 </div>
 
+                {{-- Display current image / Image Preview  --}}
+                <div class="field">
+                    <label class="label">Product Image</label>
+                    <div class="control">
+                        {{-- Modify the existing figure/img element to have the ID --}}
+                        <figure class="image is-128x128 mt-4">
+                            <img id="image-preview" src="{{ $product->image_url }}" alt="Current Product Image">
+                        </figure>
+                    </div>
+                </div>
+
                 {{-- Image Upload --}}
                 <div class="field">
-                    <label class="label" for="image">Product Image</label>
+                    {{-- <label class="label" for="image">Choose New Image</label> Changed label text slightly --}}
                     <div class="file has-name is-fullwidth @error('image') is-danger @enderror">
                         <label class="file-label">
                             <input class="file-input" type="file" name="image" id="image" accept="image/*">
@@ -114,13 +154,6 @@
                     @error('image')
                         <p class="help is-danger">{{ $message }}</p>
                     @enderror
-
-                    {{-- Display current image --}}
-                    @if ($product->image_path)
-                        <figure class="image is-128x128 mt-4">
-                            <img src="{{ asset($product->image_path) }}" alt="Current Product Image">
-                        </figure>
-                    @endif
                 </div>
 
 
@@ -144,15 +177,65 @@
         <script>
             const fileInput = document.getElementById('image');
             const fileNameSpan = document.getElementById('file-name');
+            const imagePreview = document.getElementById('image-preview'); // Get the preview element
 
-            if (fileInput) {
+            // Add console logs to help debug
+            console.log('Script loaded for product edit.');
+            console.log('fileInput:', fileInput);
+            console.log('fileNameSpan:', fileNameSpan);
+            console.log('imagePreview:', imagePreview);
+            console.log('Initial imagePreview src:', imagePreview ? imagePreview.src : 'Element not found');
+
+
+            if (fileInput && fileNameSpan && imagePreview) { // Check if all elements are found
                 fileInput.onchange = () => {
+                    console.log('File input change event fired.');
+
                     if (fileInput.files.length > 0) {
-                        fileNameSpan.textContent = fileInput.files[0].name;
+                        const selectedFile = fileInput.files[0];
+                        console.log('File selected:', selectedFile);
+
+                        // Update file name display
+                        fileNameSpan.textContent = selectedFile.name;
+
+                        // Check if the selected file is an image before trying to preview
+                        if (selectedFile.type.startsWith('image/')) {
+                            console.log('File is an image. Reading for preview.');
+                            // Read the selected file for preview
+                            const reader = new FileReader();
+
+                            reader.onload = (e) => {
+                                console.log('FileReader onload complete. Setting preview src.');
+                                // Set the image source to the data URL
+                                imagePreview.src = e.target.result;
+                            };
+
+                            reader.onerror = (e) => {
+                                console.error('FileReader error:', e);
+                                // Optionally show a broken image or placeholder on error
+                                imagePreview.src =
+                                    "{{ asset('images/error_placeholder.png') }}"; // Make sure you have an error placeholder
+                            };
+
+                            // Read the file as a Data URL
+                            reader.readAsDataURL(selectedFile);
+                        } else {
+                            console.log('Selected file is not an image.');
+                            // If a non-image is selected, revert to the original image
+                            imagePreview.src = "{{ $product->image_url }}";
+                        }
+
+
                     } else {
+                        console.log('No file selected.');
+                        // Reset file name and preview if no file is chosen
                         fileNameSpan.textContent = 'No file chosen';
+                        // On edit, reset to the *original* image URL if user deselects the file
+                        imagePreview.src = "{{ $product->image_url }}";
                     }
                 }
+            } else {
+                console.error('One or more required elements for image preview not found.');
             }
         </script>
     @endpush

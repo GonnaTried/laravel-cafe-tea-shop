@@ -70,15 +70,12 @@ class MenuItem extends Model
         if ($this->image_path) {
             // Check if the path looks like a storage path (e.g., doesn't start with 'images/')
             if (!Str::startsWith($this->image_path, 'images/')) {
-                // Assume it's a storage path if it doesn't start with 'images/'
                 // Need Illuminate\Support\Str; at the top
                 return asset('storage/' . $this->image_path);
             } else {
-                // Assume it's a public path (e.g., images/...)
                 return asset($this->image_path);
             }
         }
-        // Return a placeholder URL if no image_path is set
-        return asset('images/placeholder.png'); // Make sure you have a placeholder image
+        return asset('images/placeholder.png');
     }
 }

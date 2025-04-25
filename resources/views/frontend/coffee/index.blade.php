@@ -35,7 +35,9 @@
                                         <a href="{{ route('viewItem.index', $coffee->slug) }}">
                                             <div class="card-image">
                                                 <figure class="image is-4by5">
-                                                    <img src="{{ asset($coffee->image_path) }}" alt="{{ $coffee->name }}">
+                                                    {{-- <img src="{{ asset($coffee->image_path) }}" alt="{{ $coffee->name }}"> --}}
+                                                    <img src="{{ $coffee->image_url }}" alt="{{ $coffee->name }}">
+
                                                 </figure>
                                             </div>
                                         </a>
@@ -86,7 +88,9 @@
                                         <a href="{{ route('viewItem.index', $coffee->slug) }}">
                                             <div class="card-image">
                                                 <figure class="image is-4by5">
-                                                    <img src="{{ asset($coffee->image_path) }}" alt="{{ $coffee->name }}">
+                                                    {{-- <img src="{{ asset($coffee->image_path) }}" alt="{{ $coffee->name }}"> --}}
+                                                    <img src="{{ $coffee->image_url }}" alt="{{ $coffee->name }}">
+
                                                 </figure>
                                             </div>
                                         </a>
@@ -120,6 +124,8 @@
                             @endforeach
                         </div>
                     </section>
+
+                    {{-- frappe-coffees --}}
                     <section id="frappe-coffees">
                         <div class="has-text-centered">
                             <br>
@@ -134,7 +140,9 @@
                                         <a href="{{ route('viewItem.index', $coffee->slug) }}">
                                             <div class="card-image">
                                                 <figure class="image is-4by5">
-                                                    <img src="{{ asset($coffee->image_path) }}" alt="{{ $coffee->name }}">
+                                                    {{-- <img src="{{ asset($coffee->image_path) }}" alt="{{ $coffee->name }}"> --}}
+                                                    <img src="{{ $coffee->image_url }}" alt="{{ $coffee->name }}">
+
                                                 </figure>
                                             </div>
                                         </a>
@@ -222,7 +230,7 @@
                         if (targetSection) {
                             window.scrollTo({
                                 top: targetSection.offsetTop -
-                                50, // Adjust offset if needed
+                                    50, // Adjust offset if needed
                                 behavior: 'smooth'
                             });
                         }

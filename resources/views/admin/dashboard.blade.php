@@ -31,7 +31,7 @@
         <div class="column is-one-third">
             <div class="card has-background-dark">
                 <div class="card-header">
-                    <p class="card-header-title">Total Products</p>
+                    <p class="card-header-title has-text-info">Total Products</p>
                 </div>
                 <div class="card-content">
                     <p class="title is-4">{{ $totalProductCount }}</p>
@@ -43,10 +43,10 @@
         <div class="column is-one-third">
             <div class="card has-background-dark">
                 <div class="card-header">
-                    <p class="card-header-title">Total Income This Month</p>
+                    <p class="card-header-title has-text-warning">Total Income This Month</p>
                 </div>
                 <div class="card-content">
-                    <p class="title is-4">{{ $totalIncomeMonthly }}</p>
+                    <p class="title is-4 ">{{ $totalIncomeMonthly . ' $' }}</p>
                     {{-- <a href="{{ route('admin.products.index') }}" class="button is-info is-small">Manage Products</a> --}}
                 </div>
             </div>
@@ -66,9 +66,7 @@
         <div class="card-content">
             <div class="buttons">
                 <a href="admin/products" class="button is-info">Product Management</a>
-                <a href="" class="button is-success">Inventory Management</a>
-                <a href="" class="button is-primary">Customer Management</a>
-                <a href="" class="button is-warning">Staff Management</a>
+                <a href="admin/users" class="button is-primary">Users Management</a>
             </div>
         </div>
     </div>

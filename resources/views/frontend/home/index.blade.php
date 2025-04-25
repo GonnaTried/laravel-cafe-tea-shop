@@ -16,7 +16,7 @@
                                 <a href="{{ route('viewItem.index', ['slug' => $menuItem->slug]) }}">
                                     <div class="card-image">
                                         <figure class="image is-4by5">
-                                            <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}">
+                                            <img src="{{ $menuItem->image_url }}" alt="{{ $menuItem->name }}">
                                         </figure>
                                     </div>
                                 </a>
@@ -47,7 +47,7 @@
                                 <a href="{{ route('viewItem.index', ['slug' => $menuItem->slug]) }}">
                                     <div class="card-image">
                                         <figure class="image is-4by5">
-                                            <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}">
+                                            <img src="{{ $menuItem->image_url }}" alt="{{ $menuItem->name }}">
                                         </figure>
                                     </div>
                                 </a>
@@ -78,7 +78,7 @@
                                 <a href="{{ route('viewItem.index', ['slug' => $menuItem->slug]) }}">
                                     <div class="card-image">
                                         <figure class="image is-4by5">
-                                            <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}">
+                                            <img src="{{ $menuItem->image_url }}" alt="{{ $menuItem->name }}">
                                         </figure>
                                     </div>
                                 </a>
@@ -111,7 +111,7 @@
                                 <a href="{{ route('viewItem.index', ['slug' => $menuItem->slug]) }}">
                                     <div class="card-image">
                                         <figure class="image is-4by5">
-                                            <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}">
+                                            <img src="{{ $menuItem->image_url }}" alt="{{ $menuItem->name }}">
                                         </figure>
                                     </div>
                                 </a>
@@ -142,7 +142,7 @@
                                 <a href="{{ route('viewItem.index', ['slug' => $menuItem->slug]) }}">
                                     <div class="card-image">
                                         <figure class="image is-4by5">
-                                            <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}">
+                                            <img src="{{ $menuItem->image_url }}" alt="{{ $menuItem->name }}">
                                         </figure>
                                     </div>
                                 </a>
@@ -170,7 +170,7 @@
                 <br>
             </div>
             <figure class="image is-16by9">
-                <img src="images/Cafe-design.png" />
+                <img src="{{ asset('images/Cafe-design.png') }}" />
             </figure>
         </div>
     </section>

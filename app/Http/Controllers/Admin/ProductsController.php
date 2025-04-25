@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\ItemOption;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,23 +14,22 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $products = MenuItem::orderBy('name')->paginate(10); // Fetch products, order by name, add pagination
+        $products = MenuItem::orderBy('id')->paginate(30); // Fetch products, order by name, add pagination
 
         return view('admin.products.index', compact('products'));
     }
 
     public function create()
     {
-        // If you have categories, you might fetch them here:
-        // $categories = \App\Models\Category::all();
-        // return view('admin.products.create', compact('categories'));
+        $categories = Category::all(); // Fetch all categories
+        $itemOptions = ItemOption::all(); // Fetch all item options
 
-        return view('admin.products.create');
+        // Pass both to the view
+        return view('admin.products.create', compact('categories', 'itemOptions'));
     }
 
     public function store(Request $request)
     {
-        // 1. Validate the incoming request data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -37,33 +37,37 @@ class ProductsController extends Controller
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'inventory' => 'required|integer|min:0',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'required|image|max:2048',
+            // Validation for the single selected option (required now)
+            'selected_option_id' => 'required|exists:item_options,id',
+            // Removed 'price_adjustment' validation
         ]);
 
-        // 2. Handle image upload (if an image was provided)
         $imagePath = null;
         if ($request->hasFile('image')) {
-            // Store in 'storage/app/public/menu_item_images' (or similar)
             $imagePath = $request->file('image')->store('menu_item_images', 'public');
         }
 
-        // 3. Create the new MenuItem
         $product = MenuItem::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
-            // You might want to generate the slug here or have a mutator in your model
-            'slug' => Str::slug($request->name), // Example using Str::slug
+            'slug' => Str::slug($request->name),
             'description' => $request->description,
-            'ingredients' => $request->ingredients, // Added based on migration
+            'ingredients' => $request->ingredients,
             'price' => $request->price,
             'inventory' => $request->inventory,
-            'image_path' => $imagePath, // Store the image path in the database
+            'image_path' => $imagePath,
         ]);
 
-        // 4. Redirect the user with a success message
+
+        $selectedOptionId = $request->input('selected_option_id');
+
+        // Use attach with just the ID
+        $product->itemOptions()->attach($selectedOptionId);
+
+
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
-
 
     public function show(MenuItem $product) // Route model binding automatically fetches the product
     {
@@ -71,19 +75,22 @@ class ProductsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MenuItem $product) // Route Model Binding
-    {
-        $categories = Category::all(); // Fetch all categories
-        return view('admin.products.edit', compact('product', 'categories'));
-    }
-    /**
      * Update the specified resource in storage.
      */
+    public function edit(MenuItem $product)
+    {
+        $categories = Category::all(); // Fetch all categories
+        $itemOptions = ItemOption::all(); // Fetch all item options
+
+        // Fetch the options currently attached to the product with their pivot data
+        $currentOptions = $product->itemOptions->keyBy('id'); // Key by ID for easy lookup
+
+        // Pass all necessary data to the view
+        return view('admin.products.edit', compact('product', 'categories', 'itemOptions', 'currentOptions'));
+    }
+
     public function update(Request $request, MenuItem $product)
     {
-        // 1. Validate the incoming request data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -91,34 +98,37 @@ class ProductsController extends Controller
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'inventory' => 'required|integer|min:0',
-            'image' => 'nullable|image|max:2048', // Nullable allows updating without uploading a new image
+            'image' => 'required|image|max:2048',
+            // Validation for the single selected option (required now)
+            'selected_option_id' => 'required|exists:item_options,id',
+            // Removed 'price_adjustment' validation
         ]);
 
-        // 2. Handle image upload (if a new image was provided)
-        $imagePath = $product->image_path; // Keep the old path by default
+        $imagePath = $product->image_path;
         if ($request->hasFile('image')) {
-            // Delete the old image if it exists in storage/app/public
             if ($product->image_path) {
                 Storage::disk('public')->delete($product->image_path);
             }
-            // Store the new image
             $imagePath = $request->file('image')->store('menu_item_images', 'public');
         }
 
-        // 3. Update the MenuItem
         $product->update([
             'category_id' => $request->category_id,
             'name' => $request->name,
-            // Update slug if needed or let a mutator handle it
-            'slug' => Str::slug($request->name), // Example
+            'slug' => Str::slug($request->name),
             'description' => $request->description,
             'ingredients' => $request->ingredients,
             'price' => $request->price,
             'inventory' => $request->inventory,
-            'image_path' => $imagePath, // Update with the new path (or the old one)
+            'image_path' => $imagePath,
         ]);
 
-        // 4. Redirect the user with a success message
+        $selectedOptionId = $request->input('selected_option_id');
+
+        // Use sync with just the ID (in an array)
+        $product->itemOptions()->sync([$selectedOptionId]);
+
+
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 

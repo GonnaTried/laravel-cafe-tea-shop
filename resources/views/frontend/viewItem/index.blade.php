@@ -8,7 +8,9 @@
             <div class="columns">
                 <div class="column is-half">
                     <figure class="image is-4by5">
-                        <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}">
+                        {{-- <img src="{{ asset($menuItem->image_path) }}" alt="{{ $menuItem->name }}"> --}}
+                        <img src="{{ $menuItem->image_url }}" alt="{{ $menuItem->name }}">
+
                     </figure>
                 </div>
                 <div class="column is-half">
