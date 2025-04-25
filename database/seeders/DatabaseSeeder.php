@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
             ColdCoffeeSeeder::class,
             FrappeCoffeeSeeder::class,
 
+            // dump user
+            AdminUserSeeder::class,
+            StuffUserSeeder::class,
+
         ]);
     }
 }

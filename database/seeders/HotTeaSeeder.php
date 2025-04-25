@@ -21,10 +21,6 @@ class HotTeaSeeder extends Seeder
 
         // Fetch item options (assuming they've been seeded)
         $hotOption = ItemOption::where('name', 'Hot')->first();
-
-        // Clear existing data to avoid duplicates
-        MenuItem::truncate();
-
         $menuItems = [
             [
                 'category' => $teaCategory,
@@ -146,6 +142,7 @@ class HotTeaSeeder extends Seeder
                 'ingredients' => $itemData['ingredients'],
                 'price' => $itemData['price'],
                 'image_path' => $itemData['image_path'],
+                'inventory' => 100, // <-- Added this line with a default value
             ]);
 
             // Attach item options
