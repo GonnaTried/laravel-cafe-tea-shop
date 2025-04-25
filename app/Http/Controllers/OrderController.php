@@ -115,28 +115,26 @@ class OrderController extends Controller
 
     public function showOrderHistory()
     {
-        // Get the currently logged-in user
-        $user = Auth::user();
-        $orders = $user->orders()
-            ->orderBy('created_at', 'desc')
-            ->with('orderItems.menuItem')
-            ->get();
-        // Categorize the orders by status
-        $categorizedOrders = $orders->groupBy('status');
+        // Ensure the user is authenticated
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please log in to view your order history.');
+        }
 
-        // You might want to define specific status categories if they differ from your database
-        $completedOrders = $categorizedOrders['completed'] ?? collect(); // Use collect() for empty collections
-        $preparingOrders = $categorizedOrders['preparing'] ?? collect(); // Assuming 'preparing' status
-        $cancelledOrders = $categorizedOrders['cancelled'] ?? collect(); // Assuming 'cancelled' status
-        // Include 'pending' or other statuses if you have them
-        $pendingOrders = $categorizedOrders['pending'] ?? collect();
+        // Fetch all orders for the authenticated user
+        // Eager load orderItems and their relationships if needed in the _order_card partial
+        $orders = Auth::user()->orders()->with('orderItems.menuItem', 'orderItems.itemOption')->get();
 
-        // Pass the categorized orders to the view
-        return view('frontend.order.history', compact(
-            'completedOrders',
-            'preparingOrders',
-            'cancelledOrders',
-            'pendingOrders' // Include other statuses as needed
-        ));
+        // Group the orders by status
+        $groupedOrders = $orders->groupBy('status');
+
+        // Pass the grouped orders to the view
+        // Use null coalesce operator to ensure the view gets a Collection even if a status has no orders
+        return view('frontend.order.history', [
+            'pendingOrders' => $groupedOrders->get('pending', collect()), // 'pending' orders
+            'cookingOrders' => $groupedOrders->get('cooking', collect()), // 'cooking' orders
+            'completedOrders' => $groupedOrders->get('completed', collect()), // 'completed' orders
+            'cancelledOrders' => $groupedOrders->get('canceled', collect()), // 'canceled' orders (assuming you use 'canceled')
+            // Add other statuses here if you have them
+        ]);
     }
 }

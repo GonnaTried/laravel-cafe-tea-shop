@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class OrderController extends Controller
 {
@@ -59,6 +60,10 @@ class OrderController extends Controller
             // 'canceledOrdersCount' => $canceledOrdersCount,
         ]);
     }
+
+
+
+
 
     public function accept(Order $order)
     {

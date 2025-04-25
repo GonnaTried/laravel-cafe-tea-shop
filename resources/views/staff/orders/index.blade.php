@@ -130,7 +130,3 @@
 @push('styles')
     {{-- Page-specific styles here --}}
 @endpush
-
-@push('scripts')
-    {{-- Page-specific scripts here --}}
-@endpush

@@ -8,43 +8,46 @@
     <section class="section">
         <div class="container">
             <h1 class="title">Your Order History</h1>
-
-            {{-- Display Completed Orders --}}
-            @if ($completedOrders->count() > 0)
-                <h2 class="subtitle">Completed Orders</h2>
-                @foreach ($completedOrders as $order)
-                    @include('frontend.order._order_card', ['order' => $order]) {{-- Use a partial view for order details --}}
-                @endforeach
-            @endif
-
-            {{-- Display Preparing Orders --}}
-            @if ($preparingOrders->count() > 0)
-                <h2 class="subtitle">Preparing Orders</h2>
-                @foreach ($preparingOrders as $order)
-                    @include('frontend.order._order_card', ['order' => $order])
-                @endforeach
-            @endif
-
+            <br>
             {{-- Display Pending Orders --}}
             @if ($pendingOrders->count() > 0)
-                <h2 class="subtitle">Pending Orders</h2>
+                <h2 class="subtitle has-text-primary">Pending Orders</h2>
                 @foreach ($pendingOrders as $order)
                     @include('frontend.order._order_card', ['order' => $order])
                 @endforeach
             @endif
 
-            {{-- Display Cancelled Orders --}}
+            {{-- Display Cooking Orders --}}
+            @if ($cookingOrders->count() > 0)
+                <h2 class="subtitle has-text-info">Cooking Orders</h2>
+                @foreach ($cookingOrders as $order)
+                    @include('frontend.order._order_card', ['order' => $order])
+                @endforeach
+            @endif
+
+
+
+            {{-- Display Completed Orders (Typically shown last) --}}
+            @if ($completedOrders->count() > 0)
+                <h2 class="subtitle has-text-success">Completed Orders</h2>
+                @foreach ($completedOrders as $order)
+                    @include('frontend.order._order_card', ['order' => $order])
+                @endforeach
+            @endif
+
+            {{-- Display Cancelled Orders (Might be useful to show before completed) --}}
             @if ($cancelledOrders->count() > 0)
-                <h2 class="subtitle">Cancelled Orders</h2>
+                <h2 class="subtitle has-text-danger">Cancelled Orders</h2>
                 @foreach ($cancelledOrders as $order)
                     @include('frontend.order._order_card', ['order' => $order])
                 @endforeach
             @endif
 
+
             {{-- Message if no orders found --}}
             @if (
                 $completedOrders->isEmpty() &&
-                    $preparingOrders->isEmpty() &&
+                    $cookingOrders->isEmpty() &&
                     $cancelledOrders->isEmpty() &&
                     $pendingOrders->isEmpty())
                 <p>You have no order history yet.</p>
