@@ -9,50 +9,75 @@
         <div class="container">
             <h1 class="title">Your Order History</h1>
             <br>
-            {{-- Display Pending Orders --}}
-            @if ($pendingOrders->count() > 0)
-                <h2 class="subtitle has-text-primary">Pending Orders</h2>
-                @foreach ($pendingOrders as $order)
+
+            {{-- Status Filter Tabs --}}
+            {{-- Get the current status filter from the URL query string, default to 'all' --}}
+            @php
+                $statusFilter = request()->query('status', 'all');
+            @endphp
+
+            <div class="tabs is-boxed is-centered">
+                <ul>
+                    {{-- Link to All Orders --}}
+                    <li class="{{ $statusFilter == 'all' ? 'is-active' : '' }}">
+                        <a href="{{ route('order.history', ['status' => 'all']) }}">
+                            <span>All Orders</span>
+                        </a>
+                    </li>
+                    {{-- Link to Pending Orders --}}
+                    <li class="{{ $statusFilter == 'pending' ? 'is-active' : '' }}">
+                        <a href="{{ route('order.history', ['status' => 'pending']) }}">
+                            <span class="has-text-danger">Pending</span>
+                        </a>
+                    </li>
+                    {{-- Link to Cooking Orders --}}
+                    <li class="{{ $statusFilter == 'cooking' ? 'is-active' : '' }}">
+                        <a href="{{ route('order.history', ['status' => 'cooking']) }}">
+                            <span class="has-text-info">Cooking</span> {{-- Using info for consistency --}}
+                        </a>
+                    </li>
+                    {{-- Link to Completed Orders --}}
+                    <li class="{{ $statusFilter == 'completed' ? 'is-active' : '' }}">
+                        <a href="{{ route('order.history', ['status' => 'completed']) }}">
+                            <span class="has-text-success">Completed</span>
+                        </a>
+                    </li>
+                    {{-- Link to Cancelled Orders --}}
+                    <li class="{{ $statusFilter == 'cancelled' ? 'is-active' : '' }}">
+                        <a href="{{ route('order.history', ['status' => 'cancelled']) }}">
+                            <span class="has-text-danger">Cancelled</span> {{-- Using danger for cancelled --}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            {{-- Conditional Display based on Status Filter --}}
+
+            {{-- Check if there are any orders retrieved at all for the current filter --}}
+            {{-- You'll need to pass a single collection of filtered orders from the controller --}}
+
+            {{-- Placeholder: You'll replace this with a loop through a single $orders collection --}}
+            @if ($orders->count() > 0)
+                @foreach ($orders as $order)
                     @include('frontend.order._order_card', ['order' => $order])
                 @endforeach
-            @endif
+            @else
+                {{-- Message if no orders found for the *current* filter --}}
+                <p>No orders found with the status: <strong>{{ ucfirst($statusFilter) }}</strong>.</p>
+                {{-- Offer to view all orders if a specific filter is applied --}}
+                @if ($statusFilter !== 'all')
+                    <p><a href="{{ route('order.history', ['status' => 'all']) }}" class="button is-link is-outlined">View
+                            All Orders</a></p>
+                @else
+                    {{-- This is the case when 'all' is selected and there are no orders at all --}}
+                    <p>You have no order history yet.</p>
+                    <a href="{{ url('/') }}" class="button is-primary">Start Shopping</a>
+                @endif
 
-            {{-- Display Cooking Orders --}}
-            @if ($cookingOrders->count() > 0)
-                <h2 class="subtitle has-text-info">Cooking Orders</h2>
-                @foreach ($cookingOrders as $order)
-                    @include('frontend.order._order_card', ['order' => $order])
-                @endforeach
-            @endif
-
-
-
-            {{-- Display Completed Orders (Typically shown last) --}}
-            @if ($completedOrders->count() > 0)
-                <h2 class="subtitle has-text-success">Completed Orders</h2>
-                @foreach ($completedOrders as $order)
-                    @include('frontend.order._order_card', ['order' => $order])
-                @endforeach
-            @endif
-
-            {{-- Display Cancelled Orders (Might be useful to show before completed) --}}
-            @if ($cancelledOrders->count() > 0)
-                <h2 class="subtitle has-text-danger">Cancelled Orders</h2>
-                @foreach ($cancelledOrders as $order)
-                    @include('frontend.order._order_card', ['order' => $order])
-                @endforeach
             @endif
 
 
-            {{-- Message if no orders found --}}
-            @if (
-                $completedOrders->isEmpty() &&
-                    $cookingOrders->isEmpty() &&
-                    $cancelledOrders->isEmpty() &&
-                    $pendingOrders->isEmpty())
-                <p>You have no order history yet.</p>
-                <a href="{{ url('/') }}" class="button is-primary">Start Shopping</a>
-            @endif
+
 
         </div>
     </section>

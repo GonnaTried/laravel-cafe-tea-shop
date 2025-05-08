@@ -35,10 +35,10 @@
                             <p class="title is-3 has-text-warning">
                                 {{ $preparingOrdersCount ?? 0 }} {{-- Display count, default to 0 if not passed --}}
                             </p>
-                            <p class="heading has-text-white">Cooking Orders</p>
+                            <p class="heading has-text-white">Preparing Orders</p>
                             <br>
                             <a href="{{ route('staff.orders.index', ['status' => 'cooking']) }}"
-                                class="button is-warning is-outlined">View Cooking</a> {{-- Link to orders list filtered by status --}}
+                                class="button is-warning is-outlined">View Preparing</a> {{-- Link to orders list filtered by status --}}
                         </div>
                     </div>
                 </div>

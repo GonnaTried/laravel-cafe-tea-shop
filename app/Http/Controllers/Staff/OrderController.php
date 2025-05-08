@@ -43,7 +43,6 @@ class OrderController extends Controller
 
         $orders = $query->paginate(15);
 
-        // Optional: Fetch counts for the tabs if you want to display them
         // $pendingOrdersCount = Order::where('status', 'pending')->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
         // $cookingOrdersCount = Order::where('status', 'cooking')->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
         // $completedOrdersCount = Order::where('status', 'completed')->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
@@ -53,7 +52,6 @@ class OrderController extends Controller
         return view('staff.orders.index', [
             'orders' => $orders,
             'statusFilter' => $statusFilter,
-            // Pass counts here if needed (remember to apply the monthly filter here too)
             // 'pendingOrdersCount' => $pendingOrdersCount,
             // 'cookingOrdersCount' => $cookingOrdersCount,
             // 'completedOrdersCount' => $completedOrdersCount,
@@ -70,7 +68,7 @@ class OrderController extends Controller
         // Add authorization check here if needed (e.g., can this staff accept orders?)
 
         if ($order->status === 'pending') {
-            $order->status = 'cooking'; // Update status to 'cooking'
+            $order->status = 'preparing'; // Update status to 'cooking'
             $order->save();
 
             // You might want to add a success message
@@ -113,7 +111,7 @@ class OrderController extends Controller
     {
         // Add authorization check here
 
-        if ($order->status === 'cooking') {
+        if ($order->status === 'preparing') {
             $order->status = 'completed'; // Update status to 'completed'
             $order->save();
 

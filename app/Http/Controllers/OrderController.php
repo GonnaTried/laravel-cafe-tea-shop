@@ -113,28 +113,34 @@ class OrderController extends Controller
         return view('frontend.order.confirmation', compact('order', 'estimatedPreparationTime'));
     }
 
-    public function showOrderHistory()
+    public function showOrderHistory(Request $request) // Accept Request instance
     {
         // Ensure the user is authenticated
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Please log in to view your order history.');
         }
 
-        // Fetch all orders for the authenticated user
-        // Eager load orderItems and their relationships if needed in the _order_card partial
-        $orders = Auth::user()->orders()->with('orderItems.menuItem', 'orderItems.itemOption')->get();
+        // Get the logged-in user
+        $user = Auth::user();
 
-        // Group the orders by status
-        $groupedOrders = $orders->groupBy('status');
+        // Get the status filter from the query string, default to 'all'
+        $statusFilter = $request->query('status', 'all');
 
-        // Pass the grouped orders to the view
-        // Use null coalesce operator to ensure the view gets a Collection even if a status has no orders
+
+        $query = $user->orders()->with('orderItems.menuItem', 'orderItems.itemOption')->latest(); // Added ->latest() for sorting
+
+        // Apply the status filter if it's not 'all'
+        if ($statusFilter && $statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+
+
+        $orders = $query->get();
+
+        // Pass the filtered orders and the status filter to the view
         return view('frontend.order.history', [
-            'pendingOrders' => $groupedOrders->get('pending', collect()), // 'pending' orders
-            'cookingOrders' => $groupedOrders->get('cooking', collect()), // 'cooking' orders
-            'completedOrders' => $groupedOrders->get('completed', collect()), // 'completed' orders
-            'cancelledOrders' => $groupedOrders->get('canceled', collect()), // 'canceled' orders (assuming you use 'canceled')
-            // Add other statuses here if you have them
+            'orders' => $orders, // Pass the single filtered collection
+            'statusFilter' => $statusFilter, // Pass the filter value for the tabs
         ]);
     }
 }
