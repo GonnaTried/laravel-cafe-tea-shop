@@ -114,6 +114,7 @@ class HotCoffeeSeeder extends Seeder
                 'ingredients' => $itemData['ingredients'],
                 'price' => $itemData['price'],
                 'image_path' => $itemData['image_path'],
+                'inventory' => 100, // <--- Add this line
             ]);
 
             // Attach item options

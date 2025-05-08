@@ -77,7 +77,6 @@ class ColdCoffeeSeeder extends Seeder
                 'image_path' => 'images/coffees/cold/Iced latte.jpg',
                 'options' => [$coldOption],
             ],
-
         ];
 
         foreach ($menuItems as $itemData) {
@@ -89,6 +88,7 @@ class ColdCoffeeSeeder extends Seeder
                 'ingredients' => $itemData['ingredients'],
                 'price' => $itemData['price'],
                 'image_path' => $itemData['image_path'],
+                'inventory' => 100, // <--- Added this line
             ]);
 
             // Attach item options

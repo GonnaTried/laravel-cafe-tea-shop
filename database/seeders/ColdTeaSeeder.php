@@ -86,8 +86,6 @@ class ColdTeaSeeder extends Seeder
                 'image_path' => 'images/tea/cold/Sweet tea.jpg',
                 'options' => [$coldOption],
             ],
-
-
         ];
 
         foreach ($menuItems as $itemData) {
@@ -99,6 +97,7 @@ class ColdTeaSeeder extends Seeder
                 'ingredients' => $itemData['ingredients'],
                 'price' => $itemData['price'],
                 'image_path' => $itemData['image_path'],
+                'inventory' => 100, // <--- Add this line
             ]);
 
             // Attach item options

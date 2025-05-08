@@ -97,6 +97,7 @@ class FrappeCoffeeSeeder extends Seeder
                 'ingredients' => $itemData['ingredients'],
                 'price' => $itemData['price'],
                 'image_path' => $itemData['image_path'],
+                'inventory' => 100, // <--- Added this line
             ]);
 
             // Attach item options
