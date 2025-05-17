@@ -55,7 +55,7 @@
                     </form>
                     <div class="column has-text-centered">
                                     <h3>Already Have Account?</h3>
-                                    <button class="button is-primary">Login Here</button>
+                                    <a href="{{ route('login') }}" class="button is-primary">Login Here</a>
                                 </div>
                 </div>
             </div>
