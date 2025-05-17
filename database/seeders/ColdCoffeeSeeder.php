@@ -74,7 +74,7 @@ class ColdCoffeeSeeder extends Seeder
                 'description' => 'The classic latte, served over ice. Rich espresso is swirled with cold milk, creating a smooth and refreshing coffee experience. Choose your flavor addition: Vanilla, Caramel, Hazelnut',
                 'ingredients' => 'Espresso, cold whole milk (alternative milk options available), ice.',
                 'price' => 4.50,
-                'image_path' => 'images/coffees/cold/Iced latte.jpg',
+                'image_path' => 'images/coffees/cold/Iced Latte.jpg',
                 'options' => [$coldOption],
             ],
         ];
