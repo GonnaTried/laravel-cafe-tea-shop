@@ -49,13 +49,14 @@
                                 <div class="column has-text-centered">
                                     <button class="button is-primary" type="submit">Register</button>
                                 </div>
-                                <div class="column has-text-centered">
-                                    <h3>Already Have Account?</h3>
-                                    <button class="button is-primary">Login Here</button>
-                                </div>
+                                
                             </div>
                         </div>
                     </form>
+                    <div class="column has-text-centered">
+                                    <h3>Already Have Account?</h3>
+                                    <button class="button is-primary">Login Here</button>
+                                </div>
                 </div>
             </div>
         </div>
